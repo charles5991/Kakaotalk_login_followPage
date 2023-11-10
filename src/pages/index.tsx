@@ -1,14 +1,9 @@
 import Kakao from "next-auth/providers/kakao";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-
-import { api } from "~/utils/api";
+import { useEffect } from "react";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -30,13 +25,34 @@ export default function Home() {
     </>
   );
 }
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
+}
+
+function signInWithKakao() {
+  if (isMobileDevice()) {
+    const kakaoTalkAppLoginURL =
+      "kakaotalk://kakaolink?appkey=[c8ffa89ad3029af54d40b6fd2bce7ce4]&appver=[APP_VERSION]&apiver=[API_VERSION]&extras=[EXTRAS]";
+
+    window.location.href = kakaoTalkAppLoginURL;
+    setTimeout(() => {
+      if (document.visibilityState === "visible") {
+        void signIn("kakao");
+      }
+    }, 500);
+  } else {
+    // Standard web-based OAuth login
+    void signIn("kakao");
+  }
+}
 
 function AuthShowcase() {
   const { data: sessionData } = useSession();
 
   useEffect(() => {
     if (sessionData) {
-      // Render the KakaoTalk channel add button script when the user is authenticated
       const script = document.createElement("script");
       script.innerHTML = `
         window.kakaoAsyncInit = function() {
@@ -58,24 +74,6 @@ function AuthShowcase() {
       document.body.appendChild(script);
     }
   }, [sessionData]);
-
-  const handleMobileLogin = async () => {
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
-      // Check if the user is on a mobile device
-      const kakaoTalkAppLink = "kakaotalk://login"; // Deep link to KakaoTalk login
-
-      // Redirect the user to the KakaoTalk app for login
-      window.location.href = kakaoTalkAppLink;
-    } else {
-      try {
-        // Trigger web login using NextAuth.js and wait for it to complete
-        await signIn();
-      } catch (error) {
-        // Handle the error if there is any
-        console.error("Error during sign-in:", error);
-      }
-    }
-  };
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -100,7 +98,7 @@ function AuthShowcase() {
       </p>
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : handleMobileLogin}
+        onClick={sessionData ? () => void signOut() : signInWithKakao}
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
