@@ -34,7 +34,7 @@ function isMobileDevice() {
 function signInWithKakao() {
   if (isMobileDevice()) {
     const kakaoTalkAppLoginURL =
-      "kakaotalk://kakaolink?appkey=[c8ffa89ad3029af54d40b6fd2bce7ce4]&appver=[APP_VERSION]&apiver=[API_VERSION]&extras=[EXTRAS]";
+      "kakaotalk://kakaolink?appkey=[8c0f90c055ec4e697183250785874e82]&appver=[APP_VERSION]&apiver=[API_VERSION]&extras=[EXTRAS]";
 
     window.location.href = kakaoTalkAppLoginURL;
     setTimeout(() => {
