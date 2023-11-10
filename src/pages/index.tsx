@@ -14,6 +14,7 @@ export default function Home() {
       <Head>
         <title>Kakao Login App</title>
         <link rel="icon" href="/favicon.ico" />
+        <script src="https://developers.kakao.com/sdk/js/kakao.js" async />
       </Head>
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-bl from-indigo-900 via-indigo-400 to-indigo-900">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
@@ -32,7 +33,6 @@ export default function Home() {
 
 function AuthShowcase() {
   const { data: sessionData } = useSession();
-  const [kakaoButtonCreated, setKakaoButtonCreated] = useState(false);
 
   useEffect(() => {
     if (sessionData) {
@@ -59,6 +59,24 @@ function AuthShowcase() {
     }
   }, [sessionData]);
 
+  const handleMobileLogin = async () => {
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      // Check if the user is on a mobile device
+      const kakaoTalkAppLink = "kakaotalk://login"; // Deep link to KakaoTalk login
+
+      // Redirect the user to the KakaoTalk app for login
+      window.location.href = kakaoTalkAppLink;
+    } else {
+      try {
+        // Trigger web login using NextAuth.js and wait for it to complete
+        await signIn();
+      } catch (error) {
+        // Handle the error if there is any
+        console.error("Error during sign-in:", error);
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-center text-2xl text-white">
@@ -82,7 +100,7 @@ function AuthShowcase() {
       </p>
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
+        onClick={sessionData ? () => void signOut() : handleMobileLogin}
       >
         {sessionData ? "Sign out" : "Sign in"}
       </button>
