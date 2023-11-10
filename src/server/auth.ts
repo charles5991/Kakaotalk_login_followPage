@@ -47,9 +47,10 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     KakaoProvider({
-      clientId: process.env.KAKAO_CLIENT_ID,
-      clientSecret: process.env.KAKAO_CLIENT_SECRET,
-      secret: process.env.SECRET,
+      clientId:
+        process.env.KAKAO_CLIENT_ID ?? "c8ffa89ad3029af54d40b6fd2bce7ce4",
+      clientSecret:
+        process.env.KAKAO_CLIENT_SECRET ?? "nFqdulurSj3h9GSN3oHQTc9DfnGhKzIR",
     }),
     /**
      * ...add more providers here.
