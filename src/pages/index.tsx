@@ -15,7 +15,7 @@ export default function Home() {
         <title>Kakao Login App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-bl from-indigo-900 via-indigo-400 to-indigo-900">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             KakaoTalk <span className="text-[hsl(280,100%,70%)]">Login</span>{" "}
@@ -65,7 +65,7 @@ function AuthShowcase() {
         {sessionData && (
           <>
             {" "}
-            <div>
+            <div className="mb-20 flex justify-center">
               <div
                 id="kakao-talk-channel-add-button"
                 data-channel-public-id="_ZeUTxl"
@@ -73,7 +73,10 @@ function AuthShowcase() {
                 data-support-multiple-densities="true"
               ></div>
             </div>
-            <span className="mt-20">Logged in as {sessionData.user?.name}</span>
+            <span className="text-md ">
+              <p className="text-sm"> Logged in as </p>
+              <p className="font-mono uppercase "> {sessionData.user?.name}</p>
+            </span>
           </>
         )}
       </p>
